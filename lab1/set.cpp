@@ -1,5 +1,5 @@
 /*
-  Name: hashTable.h
+  Name: set.cpp
   Author: Aida Nordman
   Course: TND004, Lab 1
   Description: template class to represent a set of elements of type T
@@ -345,7 +345,17 @@ Set<T>::Set (T n) {
 //Constructor to create a Set from a sorted array
 template<typename T>
 Set<T>::Set (T a[], int n) {
-  //ADD CODE
+  tail = new Node();
+  head = new Node();
+  head->next = tail;
+  tail->prev = head;
+
+  Node* p = head;
+  for (int i = 0; i < n; ++i) {
+    Node* newNode = new Node(a[i], p->next, p);
+    p->next = p->next->prev = newNode;
+    p = newNode;
+  }
 }
 
 //Copy constructor

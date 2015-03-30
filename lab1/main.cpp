@@ -1,5 +1,5 @@
 /*
-  Name: hashTable.h
+  Name: main.cpp
   Author: Aida Nordman
   Course: TND004, Lab 1
   Description: test program for class SET
