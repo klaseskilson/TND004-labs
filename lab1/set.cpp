@@ -435,8 +435,8 @@ bool Set<T>::operator< (const Set& b) const {
 //Insert a new Node storing val before the Node pointed by p
 template<typename T>
 Set<T>& Set<T>::insert (Node *p, T val) {
-  //ADD CODE
-  return *this; //delete this code
+  Node* newNode = new Node(val, p, p->prev);
+  p->prev = p->prev->next = newNode;
 }
 
 //Delete the Node pointed by p
