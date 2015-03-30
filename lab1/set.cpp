@@ -455,7 +455,11 @@ void Set<T>::init () {
 //Display all elements in the Set
 template<typename T>
 void Set<T>::print (ostream& os) const {
-  //ADD CODE
+  Node* p = head;
+  while (p->next->next) {
+    // os << p << " ";
+    p = p->next;
+  }
 }
 
 //Set union
