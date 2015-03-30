@@ -442,8 +442,8 @@ Set<T>& Set<T>::insert (Node *p, T val) {
 //Delete the Node pointed by p
 template<typename T>
 Set<T>& Set<T>::erase (Node *p) {
-  //ADD CODE
-  return *this; //delete this code
+  p->prev->next = p->next;
+  delete p;
 }
 
 //Create an empty Set
