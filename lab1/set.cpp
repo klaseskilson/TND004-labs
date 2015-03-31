@@ -339,8 +339,6 @@ Set<T>::Set () {
 //conversion constructor
 template<typename T>
 Set<T>::Set (T n) {
-  // we could of course use init() here, but we would then
-  // set the pointers of head and tail two times too much
   init();
   insert(tail, n);
 }
@@ -350,11 +348,8 @@ template<typename T>
 Set<T>::Set (T a[], int n) {
   init();
 
-  Node* p = head;
   for (int i = 0; i < n; ++i) {
-    Node* newNode = new Node(a[i], p->next, p);
-    p->next = p->next->prev = newNode;
-    p = newNode;
+    insert(tail, a[i]);
   }
 }
 
@@ -362,19 +357,41 @@ Set<T>::Set (T a[], int n) {
 template<typename T>
 Set<T>::Set (const Set& b) {
   init();
+  Node* p = b.head->next;
+  while (p->next) {
+    insert(tail, p->value);
+    p = p->next;
+  }
 }
 
 //Destructor
 template<typename T>
 Set<T>::~Set () {
-  //ADD CODE
+  clear();
+  delete head;
+  delete tail;
 }
 
 //Assignment operator
 template<typename T>
 const Set<T>& Set<T>::operator= (const Set& b) {
-  //ADD CODE
-  return *this; //delete this code
+  if (this != &b) {
+    // ask this: avoid code duplication or prioritize performance?
+    Set _copy(b);
+
+    swap(head, _copy.head);
+    swap(tail, _copy.tail);
+    swap(counter, _copy.counter);
+
+//    clear();
+//
+//    Node* p = b.head->next;
+//    while (p->next) {
+//      insert(tail, p->value);
+//      p = p->next;
+//    }
+  }
+  return *this;
 }
 
 //Test whether a set is empty
@@ -387,21 +404,31 @@ bool Set<T>::is_empty () const {
 //Test set membership
 template<typename T>
 bool Set<T>::is_member (T val) const {
-  //ADD CODE
+  Node* p = head->next;
+  while (p->next) {
+    if (p->value == val) {
+      return true;
+    }
+    p = p->next;
+  }
   return false; //delete this code
 }
 
 //Return number of elements in the set
 template<typename T>
 int Set<T>::cardinality() const {
-  //ADD CODE
-  return 0; //delete this code
+  // too simple?
+  return counter;
 }
 
 //Make the set empty
 template<typename T>
 void Set<T>::clear() {
-  //ADD CODE
+  Node* p = head->next;
+  while (p->next) {
+    p = p->next;
+    erase(p->prev);
+  }
 }
 
 //Return true, if the set is a subset of b, otherwise false
@@ -429,14 +456,16 @@ bool Set<T>::operator< (const Set& b) const {
 }
 
 /****************************************************
- * Private member functions                          *
- *****************************************************/
+ * Private member functions                         *
+ ****************************************************/
 
 //Insert a new Node storing val before the Node pointed by p
 template<typename T>
 Set<T>& Set<T>::insert (Node *p, T val) {
   Node* newNode = new Node(val, p, p->prev);
   p->prev = p->prev->next = newNode;
+  //Node wat = *p;
+  counter++;
 }
 
 //Delete the Node pointed by p
@@ -444,6 +473,7 @@ template<typename T>
 Set<T>& Set<T>::erase (Node *p) {
   p->prev->next = p->next;
   delete p;
+  counter--;
 }
 
 //Create an empty Set
@@ -453,18 +483,17 @@ void Set<T>::init () {
   tail = new Node();
   head->next = tail;
   tail->prev = head;
+  counter = 0;
 }
 
 //Display all elements in the Set
 template<typename T>
 void Set<T>::print (ostream& os) const {
-  Node* p = head;
+  Node* p = head->next;
   os << "{ ";
   while (p->next) {
+    os << p->value << " ";
     p = p->next;
-    if (p->next) {
-      os << p->value << " ";
-    }
   }
   os << "}";
 }
@@ -473,8 +502,34 @@ void Set<T>::print (ostream& os) const {
 //Return a new set with the elements in S1 or in S2 (without repeated elements)
 template<typename T>
 Set<T> Set<T>::_union (const Set& b) const {
-  //ADD CODE
-  return *this; //delete this code
+  Set t;
+
+  Node* pa = head->next;
+  Node* pb = b.head->next;
+//  while (pa->next != a.tail) {
+//    while (pb->next != b.tail) {
+//      if (pb->value > pa->value && pb->value < pa->next->value) {
+//        a.insert(pa->next, pb->value);
+//      }
+//      pb = pb->next;
+//    }
+//    pa = pa->next;
+//  }
+  while (pa != tail && pb != b.tail) {
+    if (pa->value < pb->value) {
+      t.insert(t.tail, pa->value);
+      pa = pa->next;
+    } else if (pa->value > pb->value) {
+      t.insert(t.tail, pb->value);
+      pb = pb->next;
+    } else {
+      t.insert(t.tail, pa->value);
+      pa = pa->next;
+      pb = pb->next;
+    }
+  }
+  
+  return t;
 }
 
 //Set intersection
