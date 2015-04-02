@@ -376,20 +376,11 @@ Set<T>::~Set () {
 template<typename T>
 const Set<T>& Set<T>::operator= (const Set& b) {
   if (this != &b) {
-    // ask this: avoid code duplication or prioritize performance?
     Set _copy(b);
     
     swap(head, _copy.head);
     swap(tail, _copy.tail);
     swap(counter, _copy.counter);
-    
-    //    clear();
-    //
-    //    Node* p = b.head->next;
-    //    while (p->next) {
-    //      insert(tail, p->value);
-    //      p = p->next;
-    //    }
   }
   return *this;
 }
