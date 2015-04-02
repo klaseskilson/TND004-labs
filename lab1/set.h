@@ -1,10 +1,10 @@
-//
-//  set.h
-//  tnd004
-//
-//  Created by Klas Eskilson on 2015-04-02.
-//  Copyright (c) 2015 Klas Eskilson. All rights reserved.
-//
+/*
+ Name: set.h
+ Author: Aida Nordman, Klas Eskilson
+ Course: TND004, Lab 1
+ Description: template class to represent a set of elements of type T
+ implementation uses a sorted doubly-linked list
+ */
 
 #ifndef tnd004_set_h
 #define tnd004_set_h

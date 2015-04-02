@@ -1,6 +1,6 @@
 /*
  Name: set.cpp
- Author: Aida Nordman
+ Author: Aida Nordman, Klas Eskilson
  Course: TND004, Lab 1
  Description: template class to represent a set of elements of type T
  implementation uses a sorted doubly-linked list
