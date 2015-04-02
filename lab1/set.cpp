@@ -357,6 +357,7 @@ Set<T>::Set (T a[], int n) {
 template<typename T>
 Set<T>::Set (const Set& b) {
   init();
+
   Node* p = b.head->next;
   while (p->next) {
     insert(tail, p->value);
@@ -402,13 +403,12 @@ bool Set<T>::is_member (T val) const {
     }
     p = p->next;
   }
-  return false; //delete this code
+  return false;
 }
 
 //Return number of elements in the set
 template<typename T>
 int Set<T>::cardinality() const {
-  // too simple?
   return counter;
 }
 
@@ -426,24 +426,21 @@ void Set<T>::clear() {
 //a <= b iff every member of a is a member of b
 template<typename T>
 bool Set<T>::operator<= (const Set& b) const {
-  //ADD CODE
-  return false; //delete this code
+  return _intersection(b).counter == counter;
 }
 
 //Return true, if the set is equal to set b
 //a == b, iff a <= b and b <= a
 template<typename T>
 bool Set<T>::operator== (const Set& b) const {
-  //ADD CODE
-  return false; //delete this code
+  return (*this <= b && b <= *this);
 }
 
 //Return true, if the set is a strict subset of S, otherwise false
 //a == b, iff a <= b but not b <= a
 template<typename T>
 bool Set<T>::operator< (const Set& b) const {
-  //ADD CODE
-  return false; //delete this code
+  return *this <= b && !(b <= *this);
 }
 
 /****************************************************
@@ -517,7 +514,7 @@ Set<T> Set<T>::_union (const Set& b) const {
     t.insert(t.tail, pa->value);
     pa = pa->next;
   }
-  while (pb && pb != tail) {
+  while (pb && pb != b.tail) {
     t.insert(t.tail, pb->value);
     pb = pb->next;
   }
@@ -529,16 +526,36 @@ Set<T> Set<T>::_union (const Set& b) const {
 //Return a new set with the elements in both sets S1 and S2
 template<typename T>
 Set<T> Set<T>::_intersection (const Set& b) const {
-  //ADD CODE
-  return *this; //delete this code
+  Set t;
+
+  Node* pb = b.head->next;
+
+  while (pb != b.tail) {
+    if (is_member(pb->value)) {
+      t.insert(t.tail, pb->value);
+    }
+    pb = pb->next;
+  }
+
+  return t;
 }
 
 //Set difference
 //Return a new set with the elements in set S1 that do not belong to set S2
 template<typename T>
 Set<T> Set<T>::_difference (const Set& b) const {
-  //ADD CODE
-  return *this; //delete this code
+  Set t;
+
+  Node* pa = head->next;
+
+  while (pa != tail) {
+    if (!b.is_member(pa->value)) {
+      t.insert(t.tail, pa->value);
+    }
+    pa = pa->next;
+  }
+
+  return t;
 }
 
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */
