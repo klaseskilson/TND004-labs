@@ -217,13 +217,13 @@ Set<T> Set<T>::_intersection (const Set& b) const {
   Node* pb = b.head->next;
 
   while (pa != tail && pb != b.tail) {
-    if (pa->value == pb->value) {
-      t.insert(t.tail, pa->value);
-      pa = pa->next;
+    if (pa->value > pb->value) {
       pb = pb->next;
     } else if(pa->value < pb->value) {
       pa = pa->next;
     } else {
+      t.insert(t.tail, pa->value);
+      pa = pa->next;
       pb = pb->next;
     }
   }
@@ -235,15 +235,22 @@ Set<T> Set<T>::_intersection (const Set& b) const {
 //Return a new set with the elements in set S1 that do not belong to set S2
 template<typename T>
 Set<T> Set<T>::_difference (const Set& b) const {
-  Set t;
+  Set t(*this);
 
-  Node* pa = head->next;
+  Node* pt = t.head->next;
+  Node* pb = b.head->next;
 
-  while (pa != tail) {
-    if (!b.is_member(pa->value)) {
-      t.insert(t.tail, pa->value);
+  while (pt != t.tail && pb != b.tail) {
+    if (pt->value > pb->value) {
+      pb = pb->next;
+    } else if(pt->value < pb->value) {
+      pt = pt->next;
+    } else {
+      // skip this node in t
+      pt->prev->next = pt->next;
+      pt = pt->next;
+      pb = pb->next;
     }
-    pa = pa->next;
   }
 
   return t;
