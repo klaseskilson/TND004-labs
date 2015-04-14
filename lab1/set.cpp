@@ -32,7 +32,7 @@ Set<T>::Set (T n) {
 template<typename T>
 Set<T>::Set (T a[], int n) {
   init();
-  
+
   for (int i = 0; i < n; ++i) {
     insert(tail, a[i]);
   }
@@ -63,7 +63,7 @@ template<typename T>
 const Set<T>& Set<T>::operator= (const Set& b) {
   if (this != &b) {
     Set _copy(b);
-    
+
     swap(head, _copy.head);
     swap(tail, _copy.tail);
     swap(counter, _copy.counter);
@@ -178,10 +178,10 @@ void Set<T>::print (ostream& os) const {
 template<typename T>
 Set<T> Set<T>::_union (const Set& b) const {
   Set t;
-  
+
   Node* pa = head->next;
   Node* pb = b.head->next;
-  
+
   while (pa != tail && pb != b.tail) {
     if (pa->value < pb->value) {
       t.insert(t.tail, pa->value);
@@ -203,7 +203,7 @@ Set<T> Set<T>::_union (const Set& b) const {
     t.insert(t.tail, pb->value);
     pb = pb->next;
   }
-  
+
   return t;
 }
 
@@ -213,13 +213,19 @@ template<typename T>
 Set<T> Set<T>::_intersection (const Set& b) const {
   Set t;
 
+  Node* pa = head->next;
   Node* pb = b.head->next;
 
-  while (pb != b.tail) {
-    if (is_member(pb->value)) {
-      t.insert(t.tail, pb->value);
+  while (pa != tail && pb != b.tail) {
+    if (pa->value == pb->value) {
+      t.insert(t.tail, pa->value);
+      pa = pa->next;
+      pb = pb->next;
+    } else if(pa->value < pb->value) {
+      pa = pa->next;
+    } else {
+      pb = pb->next;
     }
-    pb = pb->next;
   }
 
   return t;
