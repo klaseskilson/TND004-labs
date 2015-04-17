@@ -246,10 +246,11 @@ Set<T> Set<T>::_difference (const Set& b) const {
     } else if(pt->value < pb->value) {
       pt = pt->next;
     } else {
-      // skip this node in t
-      pt->prev->next = pt->next;
       pt = pt->next;
       pb = pb->next;
+      // skip this node in t
+      t.counter--;
+      pt->prev->prev->next = pt->next;
     }
   }
 
