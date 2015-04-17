@@ -26,22 +26,22 @@ class Item
 {
 protected:
 
-    /** \brief Constructor to create an item
-    *
-    * \param k item's key
-    * \param v value associated with key k
-    *
-    */
-    //Constructor to create an item given a key k and a value v
-    explicit Item(string k, int v = 0)
-        : key(k) , value(v) {  };
+  /** \brief Constructor to create an item
+   *
+   * \param k item's key
+   * \param v value associated with key k
+   *
+   */
+  //Constructor to create an item given a key k and a value v
+  explicit Item(string k, int v = 0)
+    : key(k) , value(v) {  };
 
-    //data members
-    const string key; /**< key */
-    int value;       /**< value associated with the key, e.g. counter */
+  //data members
+  const string key; /**< key */
+  int value;       /**< value associated with the key, e.g. counter */
 
-    friend class HashTable;
-    friend ostream& operator<<(ostream& os, const HashTable& T);
+  friend class HashTable;
+  friend ostream& operator<<(ostream& os, const HashTable& T);
 };
 
 
@@ -54,26 +54,26 @@ class Deleted_Item: public Item
 {
 public:
 
-    /** \brief Get the item used to mark delete slots
-     *
-     * \return Pointer to a the item used to mark deleted entries in the table
-     *
-    */
-    static Deleted_Item *get_Item();
+  /** \brief Get the item used to mark delete slots
+   *
+   * \return Pointer to a the item used to mark deleted entries in the table
+   *
+   */
+  static Deleted_Item *get_Item();
 
 private:
 
-    static Deleted_Item *entry; /**< Only one instance of the class is needed to mark deleted slots of the table*/
+  static Deleted_Item *entry; /**< Only one instance of the class is needed to mark deleted slots of the table*/
 
 
-    /** \brief Default constructor
-    *
-    * Creates an item = (key = "", value = -1)
-    *
-    */
-    //Constructor
-    Deleted_Item() //only member functions can create class instances
-        : Item("", -1) { };
+  /** \brief Default constructor
+   *
+   * Creates an item = (key = "", value = -1)
+   *
+   */
+  //Constructor
+  Deleted_Item() //only member functions can create class instances
+    : Item("", -1) { };
 
 };
 
