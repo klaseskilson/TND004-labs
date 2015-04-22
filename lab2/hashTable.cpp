@@ -151,11 +151,14 @@ void HashTable::reHash() {
   // copy old values
   Item** oldTable = new Item*[size];
   memcpy(oldTable, hTable, size * sizeof(Item*));
-  // clear hTable
-  clear(size);
-
   int oldSize = size;
-  size = nextPrime(size + 2);
+
+  // set new params
+  size = nextPrime(size * 2);
+
+  // clear hTable
+  hTable = new Item*[size];
+  clear(size);
 
   // insert all values from old table to hTable
   for (int i = 0; i < oldSize; ++i) {
