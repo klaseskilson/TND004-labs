@@ -39,13 +39,15 @@ int nextPrime(int n) {
 // IMPLEMENT
 HashTable::HashTable(int table_size, HASH f)
   : size(nextPrime(table_size)), h(f), nItems(0) {
-  hTable = nullptr; //to be deleted
+  hTable = new Item*[size];
+  clear(size);
 }
 
 //destructor
 // IMPLEMENT
 HashTable::~HashTable() {
-
+  // do i need to delete every entry in hTable too?
+  delete hTable;
 }
 
 //Return the load factor of the table
@@ -57,7 +59,12 @@ double HashTable::loadFactor() const {
 //If key does not exist in the table then NOT_FOUND is returned
 // IMPLEMENT
 int HashTable::find(string key) const {
-  return NOT_FOUND; //to be deleted
+  int pos = findPosition(key);
+
+  if (pos != NOT_FOUND)
+    return hTable[pos]->value;
+  
+  return NOT_FOUND;
 }
 
 //Insert the Item (key, v) in the table
@@ -65,7 +72,18 @@ int HashTable::find(string key) const {
 //Re-hash if the table becomes 50% full
 // IMPLEMENT
 void HashTable::insert(string key, int v) {
+  int pos = findPosition(key);
 
+  if (pos != NOT_FOUND) {
+    hTable[pos]->value = v;
+  } else {
+    Item* i = new Item(key, v);
+    pos = h(key, size);
+    tryInsert(i, pos);
+  }
+
+  if (loadFactor() > MAX_LOAD_FACTOR)
+    reHash();
 }
 
 //Remove Item with key
@@ -73,6 +91,12 @@ void HashTable::insert(string key, int v) {
 //otherwise, return false
 // IMPLEMENT
 bool HashTable::remove(string key) {
+  int pos = h(key, size);
+
+  if (pos != NOT_FOUND) {
+
+  }
+
   return true; //to be deleted
 }
 
@@ -81,8 +105,7 @@ void HashTable::display(ostream& os) {
 
   os << "-------------------------------\n";
 
-  for (int i = 0; i < size; ++i)
-  {
+  for (int i = 0; i < size; ++i) {
     os << setw(6) << i << ": ";
 
     if (!hTable[i]) {
@@ -92,7 +115,7 @@ void HashTable::display(ostream& os) {
 
       os << "key = " << "\"" << key << "\""
          << setw(12) << "value = " << hTable[i]->value
-         << "  (" << h(key,size) << ")" << endl;
+         << "  (" << h(key, size) << ")" << endl;
     }
   }
 
@@ -102,6 +125,21 @@ void HashTable::display(ostream& os) {
 //Display the table to stream os
 // IMPLEMENT
 ostream& operator<<(ostream& os, const HashTable& T) {
+  if (!T.hTable) return os;
+
+  for (int i = 0, j = 0; i < T.size && j < T.nItems; ++i) {
+    if (T.hTable[i] && T.hTable[i]->value != -1) {
+      Item *a = T.hTable[i];
+
+      os << j << ". "
+         << "key = " << "\"" << a->key << "\""
+         << setw(12) << "value = " << a->value
+         << "  (" << T.h(a->key, T.size) << ")" << endl;
+
+      ++j;
+    }
+  }
+
   return os;
 }
 
@@ -110,5 +148,46 @@ ostream& operator<<(ostream& os, const HashTable& T) {
 //Rehashing function
 // IMPLEMENT
 void HashTable::reHash() {
+  // copy old values
+  Item** oldTable = new Item*[size];
+  memcpy(oldTable, hTable, size * sizeof(Item*));
+  // clear hTable
+  clear(size);
 
+  int oldSize = size;
+  size = nextPrime(size + 2);
+
+  // insert all values from old table to hTable
+  for (int i = 0; i < oldSize; ++i) {
+    if (oldTable[i]) {
+      insert(oldTable[i]->key, oldTable[i]->value);
+    }
+  }
+}
+
+// private function to insert new item at "best" position
+void HashTable::tryInsert(Item *i, int pos) {
+  if (pos > size)
+    tryInsert(i, 0);
+
+  if (!hTable[pos]) {
+    nItems++;
+    hTable[pos] = i;
+  } else {
+    tryInsert(i, pos + 1);
+  }
+}
+
+int HashTable::findPosition(string key) const {
+  for (int i = h(key, size); i < size; ++i)
+    if (hTable[i] && hTable[i]->key == key)
+      return i;
+
+  return NOT_FOUND;
+}
+
+void HashTable::clear(int stop, int start) {
+  for (int i = start; i < stop; ++i) {
+    hTable[i] = nullptr;
+  }
 }

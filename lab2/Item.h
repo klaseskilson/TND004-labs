@@ -1,5 +1,5 @@
 /*
-  Name: hashTable.h
+  Name: Item.h
   Author: Aida Nordman
   Course: TND004, Lab 2
   Description: class Item
@@ -38,7 +38,7 @@ protected:
 
   //data members
   const string key; /**< key */
-  int value;       /**< value associated with the key, e.g. counter */
+  int value;        /**< value associated with the key, e.g. counter */
 
   friend class HashTable;
   friend ostream& operator<<(ostream& os, const HashTable& T);

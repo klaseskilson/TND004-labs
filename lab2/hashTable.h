@@ -164,10 +164,21 @@ private:
   // IMPLEMENT
   void reHash();
 
+  /** \brief Find the position for element with key
+   *
+   * \param key the key
+   * \return the position in the array
+   * If the key is not found in the table then the constant NOT_FOUND is returned
+   */
+  int findPosition(string key) const;
+
+  void tryInsert(Item *i, int pos);
+
+  void clear(int stop, int start = 0);
+
 
   //disable copy constructor
   HashTable(const HashTable &);
-
 
   //disable assignment operator
   const HashTable& operator=(const HashTable &);
