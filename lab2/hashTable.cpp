@@ -91,13 +91,16 @@ void HashTable::insert(string key, int v) {
 //otherwise, return false
 // IMPLEMENT
 bool HashTable::remove(string key) {
-  int pos = h(key, size);
+  int pos = findPosition(key);
 
   if (pos != NOT_FOUND) {
-
+    delete hTable[pos];
+    hTable[pos] = Deleted_Item::get_Item();
+    nItems--;
+    return true;
   }
 
-  return true; //to be deleted
+  return false; //to be deleted
 }
 
 void HashTable::display(ostream& os) {
@@ -131,7 +134,7 @@ ostream& operator<<(ostream& os, const HashTable& T) {
     if (T.hTable[i] && T.hTable[i]->value != -1) {
       Item *a = T.hTable[i];
 
-      os << j << ". "
+      os << j << ": "
          << "key = " << "\"" << a->key << "\""
          << setw(12) << "value = " << a->value
          << "  (" << T.h(a->key, T.size) << ")" << endl;
@@ -155,7 +158,6 @@ void HashTable::reHash() {
 
   // set new params
   size = nextPrime(size * 2);
-
   // clear hTable
   hTable = new Item*[size];
   clear(size);
@@ -173,7 +175,7 @@ void HashTable::tryInsert(Item *i, int pos) {
   if (pos > size)
     tryInsert(i, 0);
 
-  if (!hTable[pos]) {
+  if (!hTable[pos] || hTable[pos] == Deleted_Item::get_Item()) {
     nItems++;
     hTable[pos] = i;
   } else {
