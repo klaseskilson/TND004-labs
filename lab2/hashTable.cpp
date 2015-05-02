@@ -100,7 +100,7 @@ bool HashTable::remove(string key) {
     return true;
   }
 
-  return false; //to be deleted
+  return false;
 }
 
 void HashTable::display(ostream& os) {
@@ -146,21 +146,30 @@ ostream& operator<<(ostream& os, const HashTable& T) {
   return os;
 }
 
+int &HashTable::operator[](string key) {
+  int index = findPosition(key);
+
+  if (index == NOT_FOUND) {
+    insert(key);
+    index = findPosition(key);
+  }
+
+  return hTable[index]->value;
+}
+
 //Private member functions
 
 //Rehashing function
 // IMPLEMENT
 void HashTable::reHash() {
   // copy old values
-  Item** oldTable = new Item*[size];
-  memcpy(oldTable, hTable, size * sizeof(Item*));
+  Item** oldTable = hTable;
   int oldSize = size;
 
   // set new params
   size = nextPrime(size * 2);
   // clear hTable
   hTable = new Item*[size];
-  clear(size);
 
   // insert all values from old table to hTable
   for (int i = 0; i < oldSize; ++i) {
@@ -184,9 +193,15 @@ void HashTable::tryInsert(Item *i, int pos) {
 }
 
 int HashTable::findPosition(string key) const {
-  for (int i = h(key, size); i < size; ++i)
+  bool flipped = false;
+  for (int i = h(key, size); i < size; ++i) {
     if (hTable[i] && hTable[i]->key == key)
       return i;
+    if (i == size - 1 && !flipped) {
+      i = 0;
+      flipped = true;
+    }
+  }
 
   return NOT_FOUND;
 }

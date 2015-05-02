@@ -127,6 +127,12 @@ public:
   friend ostream& operator<<(ostream& os, const HashTable& T);
 
 
+  /** \brief Subscript operator for hashtable
+   *
+   */
+  int & operator[](string key);
+
+
   /** \brief Display all entries in the table
    *
    * This function is used for debugging and testing purposes
