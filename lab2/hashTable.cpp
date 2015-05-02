@@ -59,10 +59,10 @@ double HashTable::loadFactor() const {
 //If key does not exist in the table then NOT_FOUND is returned
 // IMPLEMENT
 int HashTable::find(string key) const {
-  int pos = findPosition(key);
+  pair<int, int> pos = findPosition(key);
 
-  if (pos != NOT_FOUND)
-    return hTable[pos]->value;
+  if (pos.first != NOT_FOUND)
+    return hTable[pos.first]->value;
   
   return NOT_FOUND;
 }
@@ -72,14 +72,13 @@ int HashTable::find(string key) const {
 //Re-hash if the table becomes 50% full
 // IMPLEMENT
 void HashTable::insert(string key, int v) {
-  int pos = findPosition(key);
+  pair<int, int> pos = findPosition(key);
 
-  if (pos != NOT_FOUND) {
-    hTable[pos]->value = v;
+  if (pos.first != NOT_FOUND) {
+    hTable[pos.first]->value = v;
   } else {
     Item* i = new Item(key, v);
-    pos = h(key, size);
-    tryInsert(i, pos);
+    tryInsert(i, pos.second);
   }
 
   if (loadFactor() > MAX_LOAD_FACTOR)
@@ -91,11 +90,11 @@ void HashTable::insert(string key, int v) {
 //otherwise, return false
 // IMPLEMENT
 bool HashTable::remove(string key) {
-  int pos = findPosition(key);
+  pair<int, int> pos = findPosition(key);
 
-  if (pos != NOT_FOUND) {
-    delete hTable[pos];
-    hTable[pos] = Deleted_Item::get_Item();
+  if (pos.first != NOT_FOUND) {
+    delete hTable[pos.first];
+    hTable[pos.first] = Deleted_Item::get_Item();
     nItems--;
     return true;
   }
@@ -147,14 +146,15 @@ ostream& operator<<(ostream& os, const HashTable& T) {
 }
 
 int &HashTable::operator[](string key) {
-  int index = findPosition(key);
+  pair<int, int> pos = findPosition(key);
 
-  if (index == NOT_FOUND) {
-    insert(key);
-    index = findPosition(key);
+  if (pos.first == NOT_FOUND) {
+    Item *i = new Item(key);
+    tryInsert(i, pos.second);
+    pos = findPosition(key);
   }
 
-  return hTable[index]->value;
+  return hTable[pos.first]->value;
 }
 
 //Private member functions
@@ -162,6 +162,7 @@ int &HashTable::operator[](string key) {
 //Rehashing function
 // IMPLEMENT
 void HashTable::reHash() {
+  cout << "Rehashing... ";
   // copy old values
   Item** oldTable = hTable;
   int oldSize = size;
@@ -170,6 +171,8 @@ void HashTable::reHash() {
   size = nextPrime(size * 2);
   // clear hTable
   hTable = new Item*[size];
+  clear(size);
+  nItems = 0;
 
   // insert all values from old table to hTable
   for (int i = 0; i < oldSize; ++i) {
@@ -177,6 +180,7 @@ void HashTable::reHash() {
       insert(oldTable[i]->key, oldTable[i]->value);
     }
   }
+  cout << "Done. size = " << size << endl;
 }
 
 // private function to insert new item at "best" position
@@ -192,18 +196,31 @@ void HashTable::tryInsert(Item *i, int pos) {
   }
 }
 
-int HashTable::findPosition(string key) const {
+pair<int, int> HashTable::findPosition(string key) const {
+  pair<int, int> response(NOT_FOUND, NOT_FOUND);
   bool flipped = false;
+
   for (int i = h(key, size); i < size; ++i) {
-    if (hTable[i] && hTable[i]->key == key)
-      return i;
+    if (!hTable[i]) {
+      // position is empty, return not found
+      response.second = i;
+      break;
+    } else if (hTable[i] == Deleted_Item::get_Item()) {
+      // position holds a deleted item
+      response.second = i;
+    } else if (hTable[i] && hTable[i]->key == key) {
+      // key found!
+      response.first = i;
+      break;
+    }
+    // are we at the end of our array? start from the beginning!
     if (i == size - 1 && !flipped) {
-      i = 0;
+      i = -1;
       flipped = true;
     }
   }
 
-  return NOT_FOUND;
+  return response;
 }
 
 void HashTable::clear(int stop, int start) {

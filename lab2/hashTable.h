@@ -173,13 +173,15 @@ private:
   /** \brief Find the position for element with key
    *
    * \param key the key
-   * \return the position in the array
+   * \return pair, first param is the actual found position, second is the closest available position to the key
    * If the key is not found in the table then the constant NOT_FOUND is returned
    */
-  int findPosition(string key) const;
+  pair<int, int> findPosition(string key) const;
 
+  // recursive function that inserts i as close as pos as it is possible
   void tryInsert(Item *i, int pos);
 
+  // set every value in hTable to nullptr
   void clear(int stop, int start = 0);
 
 
