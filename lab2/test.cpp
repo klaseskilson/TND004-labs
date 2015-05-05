@@ -38,7 +38,8 @@ int menu() {
   cout << "2. Search" << endl;
   cout << "3. Delete" << endl;
   cout << "4. Dump table" << endl;
-  cout << "5. Exit" << endl;
+  cout << "5. Increment value" << endl;
+  cout << "6. Exit" << endl;
 
   cout << "Enter your choice: ";
 
@@ -101,6 +102,13 @@ int main() {
       break;
 
     case 5:
+      cout << "Enter the key to increment: ";
+      cin >> key;
+
+      table[key]++;
+      break;
+
+    case 6:
       go = false;
       break;
 
