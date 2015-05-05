@@ -177,8 +177,10 @@ void HashTable::reHash() {
 
   // insert all values from old table to hTable
   for (int i = 0; i < oldSize; ++i) {
-    if (oldTable[i]) {
-      insert(oldTable[i]->key, oldTable[i]->value);
+    if (oldTable[i] && oldTable[i] != Deleted_Item::get_Item()) {
+      int index = h(oldTable[i]->key, size);
+      tryInsert(oldTable[i], index);
+//      insert(oldTable[i]->key, oldTable[i]->value);
     }
   }
   cout << "Done. size = " << size << endl;
