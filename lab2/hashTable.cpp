@@ -208,8 +208,11 @@ pair<int, int> HashTable::findPosition(string key) const {
 
   for (int i = h(key, size); i < size; ++i) {
     if (!hTable[i]) {
+      // set second response param to not found only if it
+      // isn't already set
+      if (response.second == NOT_FOUND)
+        response.second = i;
       // position is empty, return not found
-      response.second = i;
       break;
     } else if (hTable[i] == Deleted_Item::get_Item()) {
       // position holds a deleted item
