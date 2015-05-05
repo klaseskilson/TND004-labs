@@ -170,6 +170,8 @@ private:
   // IMPLEMENT
   void reHash();
 
+  void reHashIfNeeded();
+
   /** \brief Find the position for element with key
    *
    * \param key the key

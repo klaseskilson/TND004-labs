@@ -81,8 +81,7 @@ void HashTable::insert(string key, int v) {
     tryInsert(i, pos.second);
   }
 
-  if (loadFactor() > MAX_LOAD_FACTOR)
-    reHash();
+  reHashIfNeeded();
 }
 
 //Remove Item with key
@@ -134,9 +133,8 @@ ostream& operator<<(ostream& os, const HashTable& T) {
       Item *a = T.hTable[i];
 
       os << j << ": "
-         << "key = " << "\"" << a->key << "\""
-         << setw(12) << "value = " << a->value
-         << "  (" << T.h(a->key, T.size) << ")" << endl;
+         << "key = " << a->key
+         << setw(12) << "value = " << a->value << endl;
 
       ++j;
     }
@@ -151,6 +149,9 @@ int &HashTable::operator[](string key) {
   if (pos.first == NOT_FOUND) {
     Item *i = new Item(key);
     tryInsert(i, pos.second);
+
+    reHashIfNeeded();
+    
     pos = findPosition(key);
   }
 
@@ -183,6 +184,11 @@ void HashTable::reHash() {
   cout << "Done. size = " << size << endl;
 }
 
+void HashTable::reHashIfNeeded() {
+  if (loadFactor() > MAX_LOAD_FACTOR)
+    reHash();
+}
+
 // private function to insert new item at "best" position
 void HashTable::tryInsert(Item *i, int pos) {
   if (pos > size)
@@ -210,7 +216,7 @@ pair<int, int> HashTable::findPosition(string key) const {
       response.second = i;
     } else if (hTable[i] && hTable[i]->key == key) {
       // key found!
-      response.first = i;
+      response.first = response.second = i;
       break;
     }
     // are we at the end of our array? start from the beginning!

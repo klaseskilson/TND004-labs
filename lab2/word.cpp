@@ -45,7 +45,7 @@ int main() {
   const int TABLE_SIZE = 7;
   HashTable table(TABLE_SIZE, my_hash);
 
-  string filename = "test_file1.txt", word = "";
+  string filename = "test_file2.txt", word = "";
   //cout << "Enter filename: ";
   //cin >> filename;
 
@@ -59,11 +59,8 @@ int main() {
 
   while (readFile >> word) {
     clean_punct(word);
-    // KOLLA SÅ ATT DEN INTE FÖRSÖKER INFOGA PÅ POSITION 7 som inte finns NÄR DEN KOMMER TILL THE
-    cout << endl << endl << word << endl;
-    table.display(cout);
+    // cout << endl << endl << word << endl;
     table[word]++;
-    table.display(cout);
   }
 
   cout << table;
