@@ -1,4 +1,4 @@
-/**********************************************
+ /**********************************************
 * File: test1.cpp                             *
 * Author: Aida Nordman                        *
 * Course: TND004, Lab 3                       *
@@ -20,7 +20,7 @@ using namespace std;
 int main()
 {
   /******************************************************
-  *PHASE 0: constructor, empty(), size()                *
+  * PHASE 0: constructor, empty(), size()               *
   ******************************************************/
   cout << "**TEST PHASE 0: constructor, empty, size"
        << endl << endl;

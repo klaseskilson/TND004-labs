@@ -17,13 +17,12 @@ using namespace std;
 //Empty tree has a dummy node as root
 //The real tree is stored as left child of the dummy root
 BST_threaded::BST_threaded()
- : counter(0) {
+: counter(0) {
   //ADD CODE
 }
 
 //destructor
 BST_threaded::~BST_threaded() {
-  //ADD CODE
 }
 
 //Test if the tree is empty
