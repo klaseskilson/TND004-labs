@@ -85,7 +85,14 @@ void Node::removeMe(Node* parent, bool isRight) {
 //key is possibly stored in one of the sub-trees of this node
 //If there is no node storing key then return nullptr
 Node* Node::find(string key) {
-  //ADD CODE
+  if (key < value.first && !l_thread)
+    return left->find(key);
+  else if (value.first < key && !r_thread)
+    return right->find(key);
+  else if (value.first == key)
+    return this;
+
+  // not found
   return nullptr;
 }
 

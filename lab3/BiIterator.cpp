@@ -18,7 +18,7 @@ BiIterator::BiIterator(Node *ptr)
 
 //Dereferencing operator
 ELEMENT& BiIterator::operator*() const {
-  //ADD CODE
+  return current->value;
 }
 
 //Member access operator
@@ -29,8 +29,7 @@ ELEMENT* BiIterator::operator->() const {
 
 //Equality comparison operator
 bool BiIterator::operator==(const BiIterator &it) const {
-  //ADD CODE
-  return false;
+  return this->current == it.current;
 }
 
 //Inequality comparison operator
