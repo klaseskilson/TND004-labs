@@ -100,16 +100,20 @@ Node* Node::find(string key) {
 //Return a pointer to the node storing the smalest value
 //of the tree whose root is this node
 Node* Node::findMin() {
-  //ADD CODE
-  return nullptr;
+  if (left && left->right)
+    return left->findMin();
+
+  return this;
 }
 
 
 //Return a pointer to the node storing the largest value
 //of the tree whose root is this node
 Node* Node::findMax() {
-  //ADD CODE
-  return nullptr;
+  if (right && right->right)
+    return right->findMax();
+
+  return this;
 }
 
 
