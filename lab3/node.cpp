@@ -100,7 +100,7 @@ Node* Node::find(string key) {
 //Return a pointer to the node storing the smalest value
 //of the tree whose root is this node
 Node* Node::findMin() {
-  if (left && left->right)
+  if (!l_thread)
     return left->findMin();
 
   return this;
@@ -110,7 +110,7 @@ Node* Node::findMin() {
 //Return a pointer to the node storing the largest value
 //of the tree whose root is this node
 Node* Node::findMax() {
-  if (right && right->right)
+  if (!r_thread)
     return right->findMax();
 
   return this;

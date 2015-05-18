@@ -89,8 +89,8 @@ BiIterator BST_threaded::find(string key) const {
 
 //Return an iterator referring to the first node in the inorder traversal of the BST
 BiIterator BST_threaded::begin() const {
-  //ADD CODE
-  return end();
+  BiIterator it(root->left->findMin());
+  return it;
 }
 
 //Return a BiIterator referring to the past-the-end element in the BST
@@ -105,7 +105,7 @@ BiIterator BST_threaded::end() const {
 void BST_threaded::display() const {
   if (!empty())
     root->left->display();
-   else
+  else
     cout << "The container is empty!!" << endl;
 }
 
