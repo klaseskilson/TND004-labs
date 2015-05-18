@@ -23,7 +23,6 @@ Node::~Node() {
     delete left;
   if (right && !r_thread)
     delete right;
-  // delete this;
 }
 
 
@@ -31,7 +30,24 @@ Node::~Node() {
 //Return true, if v was inserted
 //Otherwise, return false --v already exists in the tree
 bool Node::insert(ELEMENT v) {
-  //ADD CODE
+  if (l_thread && v.first < value.first) {
+    Node* p = new Node(v, left, this);
+    left = p;
+    left->l_thread = left->r_thread = true;
+    l_thread = false;
+    return true;
+  } else if (r_thread && value.first < v.first) {
+    Node* p = new Node(v, this, right);
+    right = p;
+    right->l_thread = right->r_thread = true;
+    r_thread = false;
+    return true;
+  } else if (!l_thread && v.first < value.first) {
+    return left->insert(v);
+  } else if (!r_thread && v.first > value.first) {
+    return right->insert(v);
+  }
+  
   return false;
 }
 
