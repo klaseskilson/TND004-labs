@@ -166,7 +166,6 @@ class BST_threaded
   //Disable copy constructor
   BST_threaded(const BST_threaded &source);
 
-
   /** \brief Disabled assignment operator.
   *
   */

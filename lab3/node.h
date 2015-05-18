@@ -19,7 +19,7 @@ using namespace std;
 *
 */
 //A pair to store a string and a counter
-typedef pair<string,int> ELEMENT;
+typedef pair<string, int> ELEMENT;
 //Nodes of the BSTs store ELEMENTs
 
 

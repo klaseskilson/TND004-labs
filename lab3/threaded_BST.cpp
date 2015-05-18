@@ -18,43 +18,43 @@ using namespace std;
 //The real tree is stored as left child of the dummy root
 BST_threaded::BST_threaded()
 : counter(0) {
-  //ADD CODE
+  root = new Node(ELEMENT(), root, root);
+  root->l_thread = root->r_thread = true;
 }
 
 //destructor
 BST_threaded::~BST_threaded() {
+  delete root;
 }
 
 //Test if the tree is empty
 bool BST_threaded::empty() const {
-  //ADD CODE
-  return true;
+  return counter == 0;
 }
 
 //Return mumber of keys (elements) stored in the tree
 int BST_threaded::size() const {
-   //ADD CODE
-  return 0;
+  return counter;
 }
 
 //Insert v in the tree
 void BST_threaded::insert(ELEMENT v) {
-  if (empty())
-  {
+  if (empty()) {
     //Insert first node of the BST has a left child of the BST
     root->left = new Node(v, root, root);
     root->left->l_thread = root->left->r_thread = true;
 
     root->l_thread = false;
     counter = 1;
-  }
-  else
+  } else {
     counter += root->left->insert(v); //call NODE::insert()
+  }
 }
 
 //Remove node with key from the tree
 void BST_threaded::remove(string key) {
-   //ADD CODE
+  //ADD CODE
+  --counter;
 }
 
 //If key matches the key of an element in the container,

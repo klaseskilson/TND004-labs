@@ -19,7 +19,11 @@ Node::Node(ELEMENT v, Node *l, Node *r)
 //Destructor
 //recursively deletes the nodes in the left_subtree and right-subtree
 Node::~Node() {
-  //ADD CODE
+  if (left && !l_thread)
+    delete left;
+  if (right && !r_thread)
+    delete right;
+  // delete this;
 }
 
 
