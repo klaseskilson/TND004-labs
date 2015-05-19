@@ -19,9 +19,9 @@ Node::Node(ELEMENT v, Node *l, Node *r)
 //Destructor
 //recursively deletes the nodes in the left_subtree and right-subtree
 Node::~Node() {
-  if (left && !l_thread)
+  if (!l_thread)
     delete left;
-  if (right && !r_thread)
+  if (!r_thread)
     delete right;
 }
 
@@ -59,7 +59,26 @@ bool Node::insert(ELEMENT v) {
 //isRight==false: this node is left child of parent
 //isRight==true: this node is right child of parent
 bool Node::remove(string key, Node* parent, bool isRight) {
-  //ADD CODE
+  if (key < value.first && !l_thread) {
+    left->remove(key, this, false);
+    return true;
+  } else if (value.first < key && !r_thread) {
+    right->remove(key, this, true);
+    return true;
+  } else {
+    //Node has two children
+    if (!l_thread && !r_thread)
+    {
+      // replace this value with smallest value
+      value = right->findMin()->value;
+      return right->remove(value.first, this, true);
+    }
+    else{
+      removeMe(parent, isRight);
+      return true;
+    }
+  }
+
   return false;
 }
 
@@ -76,7 +95,52 @@ bool Node::remove(string key, Node* parent, bool isRight) {
 //2b: a right child with only a left child
 //2c: a right child with no children
 void Node::removeMe(Node* parent, bool isRight) {
-  //ADD CODE
+  if (!isRight) {
+    // case 1
+    if (!r_thread) {
+      // case 1a
+      // move parent
+      parent->left = right;
+      // move thread if right->left is a thread
+      if (right->l_thread) {
+        right->left = left;
+      }
+    } else if (!l_thread) {
+      // case 1b
+      parent->left = left;
+      if (left->r_thread) {
+        left->right = parent;
+      }
+    } else {
+      // case 1c
+      parent->l_thread = true;
+      parent->left = left;
+    }
+  } else {
+    // case 2
+    if (!r_thread) {
+      // case 2a
+      // move parent's right
+      parent->right = right;
+      // check if children is thread
+      if (right->l_thread) {
+        right->left = parent;
+      }
+    } else if (!l_thread) {
+      // case 2b
+      parent->right = left;
+      if (left->r_thread) {
+        left->right = right;
+      }
+    } else {
+      // case 2c
+      parent->r_thread = true;
+      parent->right = right;
+    }
+  }
+
+  // somehow delete this node
+  delete this;
 }
 
 

@@ -104,38 +104,40 @@ int main()
     cout << setw(10) << it->first
          << setw(12) << it->second << endl;
   }
-//
-//   /******************************************************
-//   *PHASE 4: remove                                      *
-//   *******************************************************/
-//  cout << "\n**TEST PHASE 4: remove" << endl << endl;
-//
-//  table.remove("6");
-//  table.remove("5");
-//  table.remove("7");
-//
-//  cout << "\n\nTable sorted increasingly after removing 5, 6, and 7..."
-//       << endl << endl;
-//
-//  it = table.begin();
-//
-//  cout << "  \tKEY" << "\tCOUNTER" << endl;
-//  cout << "==============================\n";
-//  for( ; it != table.end(); it++)
-//  {
-//       cout << setw(10) << it->first
-//            << setw(12) << it->second << endl;
-//  }
-//
-//  cout << "\nRemove all ..." << endl;
-//
-//  table.remove("2");
-//  table.remove("4");
-//  table.remove("8");
-//  table.remove("100");
-//
-//  if (table.empty())
-//      cout << "Table is empty!" << endl << endl;
+
+  /******************************************************
+   *PHASE 4: remove                                     *
+   ******************************************************/
+  cout << "\n**TEST PHASE 4: remove" << endl << endl;
+
+  table.remove("6");
+  table.remove("5");
+  table.remove("7");
+
+
+  cout << "\n\nTable sorted increasingly after removing 5, 6, and 7..."
+       << endl << endl;
+
+  it = table.begin();
+
+  cout << "  \tKEY" << "\tCOUNTER" << endl;
+  cout << "==============================\n";
+  for( ; it != table.end(); it++)
+  {
+       cout << setw(10) << it->first
+            << setw(12) << it->second << endl;
+  }
+
+  cout << "\nRemove all ..." << endl;
+
+  table.remove("2");
+  table.remove("4");
+  table.remove("8");
+  table.remove("100");
+
+
+  if (table.empty())
+      cout << "Table is empty!" << endl << endl;
 
   cout << "All tests passed successfully!!" << endl << endl;
 

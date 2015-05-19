@@ -53,8 +53,8 @@ void BST_threaded::insert(ELEMENT v) {
 
 //Remove node with key from the tree
 void BST_threaded::remove(string key) {
-  //ADD CODE
-  --counter;
+  if (root->left->remove(key, root, false))
+    --counter;
 }
 
 //If key matches the key of an element in the container,
@@ -62,6 +62,8 @@ void BST_threaded::remove(string key) {
 //If key does not match the key of any element in the container,
 //then an ELEMENT (key,0) is inserted and a reference to it is returned
 ELEMENT& BST_threaded::operator[](string key) {
+  // TODO: improve this
+
   BiIterator it = find(key);
 
   if (it == end()) {
