@@ -53,7 +53,17 @@ void DSets::join(int r, int s)
     assert(array[s] < 0);
 
     // simple union
-    array[r]  = s;
+    if (array[r] < array[s])
+    {
+        array[s]  = r;
+        --array[r];
+    }
+    else
+    {
+        array[r]  = s;
+        --array[s];
+    }
+
 
     // *** TODO ***
     // weighted union (by size)

@@ -119,7 +119,7 @@ void Graph::mstKruskal() const
         Node *p = array[i].getFirst();
         while (p)
         {
-            if (p->vertex > i)
+            if (i < p->vertex)
             {
                 H.insert(Edge(i, p->vertex, p->weight));
             }
@@ -139,6 +139,8 @@ void Graph::mstKruskal() const
             ++counter;
         }
     }
+
+    D.print();
 
     cout << endl << "Total weight = " << total << endl;
 }
