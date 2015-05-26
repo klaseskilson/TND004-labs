@@ -47,7 +47,7 @@ bool Node::insert(ELEMENT v) {
   } else if (!r_thread && v.first > value.first) {
     return right->insert(v);
   }
-  
+
   return false;
 }
 
@@ -59,27 +59,41 @@ bool Node::insert(ELEMENT v) {
 //isRight==false: this node is left child of parent
 //isRight==true: this node is right child of parent
 bool Node::remove(string key, Node* parent, bool isRight) {
-  if (key < value.first && !l_thread) {
-    left->remove(key, this, false);
-    return true;
-  } else if (value.first < key && !r_thread) {
-    right->remove(key, this, true);
-    return true;
-  } else {
-    //Node has two children
-    if (!l_thread && !r_thread)
+  if (key < value.first)
+  {
+    if (l_thread)
     {
-      // replace this value with smallest value
-      value = right->findMin()->value;
-      return right->remove(value.first, this, true);
+        return false;
     }
-    else{
-      removeMe(parent, isRight);
-      return true;
+    else
+    {
+        return left->remove(key, this, false);
     }
   }
+  else if (value.first < key)
+  {
+      if(r_thread)
+      {
+          return false;
+      }
+      else
+      {
+          return right->remove(key, this, true);
+      }
+  }
+  else if (!l_thread && !r_thread)
+  {
+    // replace this value with smallest value
+    value = right->findMin()->value;
+    return right->remove(value.first, this, true);
+  }
+  else if (key == value.first)
+  {
+    removeMe(parent, isRight);
+    return true;
+  }
 
-  return false;
+  //return false;
 }
 
 
@@ -102,15 +116,11 @@ void Node::removeMe(Node* parent, bool isRight) {
       // move parent
       parent->left = right;
       // move thread if right->left is a thread
-      if (right->l_thread) {
-        right->left = left;
-      }
+      right->findMin()->left = left;
     } else if (!l_thread) {
       // case 1b
       parent->left = left;
-      if (left->r_thread) {
-        left->right = parent;
-      }
+      left->findMax()->right = parent;
     } else {
       // case 1c
       parent->l_thread = true;
@@ -122,16 +132,11 @@ void Node::removeMe(Node* parent, bool isRight) {
       // case 2a
       // move parent's right
       parent->right = right;
-      // check if children is thread
-      if (right->l_thread) {
-        right->left = parent;
-      }
+      left->findMin()->right = parent;
     } else if (!l_thread) {
       // case 2b
       parent->right = left;
-      if (left->r_thread) {
-        left->right = right;
-      }
+      left->findMax()->right = right;
     } else {
       // case 2c
       parent->r_thread = true;
@@ -139,6 +144,7 @@ void Node::removeMe(Node* parent, bool isRight) {
     }
   }
 
+  l_thread = r_thread = true;
   // somehow delete this node
   delete this;
 }
