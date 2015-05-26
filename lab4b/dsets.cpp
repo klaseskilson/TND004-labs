@@ -63,10 +63,6 @@ void DSets::join(int r, int s)
         array[r]  = s;
         --array[s];
     }
-
-
-    // *** TODO ***
-    // weighted union (by size)
 }
 
 // return name of current set for x

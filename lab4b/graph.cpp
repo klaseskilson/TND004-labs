@@ -59,18 +59,17 @@ void Graph::removeEdge(int u, int v)
 // Prim's minimum spanning tree algorithm
 void Graph::mstPrim() const
 {
-    vector<Edge> edges;
     bool done[size + 1];
     for (int v = 1; v <= size; ++v)
         done[v] = false;
 
     // c = start
-    int c = 7;
+    int c = 1, total = 0;
     done[c] = true;
     Node *e = array[c].getFirst();
 
     // while true
-    while (edges.size() != size - 1)
+    while (true)
     {
         Edge smallest = Edge(0, 0, INFINITY);
         Node *res = nullptr;
@@ -92,17 +91,13 @@ void Graph::mstPrim() const
             }
         }
 
-        // done v = true
-        edges.push_back(smallest);
-        done[c] = true;
-    }
+        if (!res)
+            break;
 
-    int total = 0;
-    // print every edge
-    for (Edge e : edges)
-    {
-        cout << e << endl;
-        total += e.weight;
+        // done v = true
+        cout << smallest << endl;
+        total += smallest.weight;
+        done[c] = true;
     }
 
     cout << endl << "Total weight = " << total << endl;
