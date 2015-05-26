@@ -60,17 +60,17 @@ void Graph::removeEdge(int u, int v)
 void Graph::mstPrim() const
 {
     vector<Edge> edges;
-    bool done[size+1];
+    bool done[size + 1];
     for (int v = 1; v <= size; ++v)
         done[v] = false;
 
     // c = start
-    int c = 1;
+    int c = 7;
     done[c] = true;
     Node *e = array[c].getFirst();
 
     // while true
-    while (true)
+    while (edges.size() != size - 1)
     {
         Edge smallest = Edge(0, 0, INFINITY);
         Node *res = nullptr;
@@ -92,28 +92,55 @@ void Graph::mstPrim() const
             }
         }
 
-        // exit while (true) if we have found next child
-        if (!res)
-            break;
-
-        edges.push_back(smallest);
-
         // done v = true
+        edges.push_back(smallest);
         done[c] = true;
     }
 
+    int total = 0;
     // print every edge
     for (Edge e : edges)
     {
-        if (e.head > 0)
-            cout << e << endl;
+        cout << e << endl;
+        total += e.weight;
     }
+
+    cout << endl << "Total weight = " << total << endl;
 }
 
 // Kruskal's minimum spanning tree algorithm
 void Graph::mstKruskal() const
 {
-    // *** TODO ***
+    Heap <Edge>H;
+    DSets D(size);
+
+    // H.heapify(edges);
+    for (int i = 1; i <= size; ++i) {
+        Node *p = array[i].getFirst();
+        while (p)
+        {
+            if (p->vertex > i)
+            {
+                H.insert(Edge(i, p->vertex, p->weight));
+            }
+            p = p->next;
+        }
+    }
+
+    int counter = 0, total = 0;
+    while (counter < size - 1)
+    {
+        Edge w = H.deleteMin();
+        if (D.find(w.head) != D.find(w.tail))
+        {
+            cout << w << endl;
+            D.join(D.find(w.head), D.find(w.tail));
+            total += w.weight;
+            ++counter;
+        }
+    }
+
+    cout << endl << "Total weight = " << total << endl;
 }
 
 // print graph
