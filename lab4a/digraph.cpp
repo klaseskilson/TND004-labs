@@ -66,19 +66,94 @@ void Digraph::uwsssp(int s)
          return;
     }
 
-    // *** TODO ***
+    Queue<int> Q;
+
+    for (int v = 1; v <= size; ++v)
+    {
+        dist[v] = INFINITY;
+        path[v] = 0;
+    }
+
+    dist[s] = 0;
+    Q.enqueue(s);
+
+    while (!Q.isEmpty())
+    {
+        int current = Q.getFront();
+        Node *u = array[current].getFirst();
+        Q.dequeue();
+
+        while (u)
+        {
+            if (dist[u->vertex] == INFINITY)
+            {
+                dist[u->vertex] = dist[current] + 1;
+                path[u->vertex] = current;
+                Q.enqueue(u->vertex);
+            }
+            u = u->next;
+        }
+    }
 }
 
 // positive weighted single source shortest pats
 void Digraph::pwsssp(int s)
 {
+    // chooses the wrong path for vertex 3 when s = 5?
     if (s < 1 || s > size)
     {
          cout << "\nERROR: expected source s in range 1.." << size << " !" << endl;
          return;
     }
 
-    // *** TODO ***
+    for (int v = 1; v <= size; ++v)
+    {
+        dist[v] = INFINITY;
+        path[v] = 0;
+        done[v] = false;
+    }
+
+    dist[s] = 0;
+    done[s] = true;
+
+
+    while (true)
+    {
+        Node *u = array[s].getFirst();
+        while (u)
+        {
+            if (!done[u->vertex] && dist[u->vertex] > dist[s] + u->weight)
+            {
+                dist[u->vertex] = dist[s] + u->weight;
+                path[u->vertex] = s;
+            }
+            u = u->next;
+        }
+
+        int smallest = INFINITY;
+        for (int i = 1; i <= size; ++i)
+        {
+            if (!done[i])
+                continue;
+
+            Node *v = array[i].getFirst();
+            while (v)
+            {
+                if (!done[v->vertex] && v->weight < smallest)
+                {
+                    smallest = v->weight;
+                    u = v;
+                    s = v->vertex;
+                }
+                v = v->next;
+            }
+        }
+
+        if (smallest == INFINITY)
+            break;
+
+        done[u->vertex] = true;
+    }
 }
 
 // print graph
@@ -121,5 +196,16 @@ void Digraph::printPath(int t) const
          return;
     }
 
-    // *** TODO ***
+    string s = "";
+    int counter = 0;
+
+    while (path[t] > 0)
+    {
+        s = to_string(t) + " " + s;
+        t = path[t];
+        counter++;
+    }
+    s = " " + to_string(t) + " " + s;
+
+    cout << s << "(" << counter << ")";
 }
