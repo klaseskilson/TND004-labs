@@ -72,11 +72,8 @@ int DSets::find(int x)
     }
     else
     {
-        return find(array[x]);
+        return array[x] = find(array[x]);
     }
-
-    // *** TODO ***
-    // find with path compression
 }
 
 // just in case ...
