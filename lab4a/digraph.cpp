@@ -196,16 +196,14 @@ void Digraph::printPath(int t) const
          return;
     }
 
-    string s = "";
-    int counter = 0;
+    string s = " (" + to_string(dist[t]) + ")";
 
     while (path[t] > 0)
     {
         s = to_string(t) + " " + s;
         t = path[t];
-        counter++;
     }
     s = " " + to_string(t) + " " + s;
 
-    cout << s << "(" << counter << ")";
+    cout << s;
 }
